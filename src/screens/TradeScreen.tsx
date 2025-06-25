@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity } from 'react-native'
 import { useTraderStore } from '../store/useTraderStore'
 import { v4 as uuidv4 } from 'uuid'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 export const TradeScreen = () => {
   const [symbol, setSymbol] = useState('BTC')
   const [usdAmount, setUsdAmount] = useState('')
-  const [action, setAction] = useState<'buy' | 'sell'>('buy')
+  const [action, setAction] = useState<'buy' | 'sell' >('buy')
 
   const balance = useTraderStore((state) => state.balance)
   const addTransaction = useTraderStore((state) => state.addTransaction)
@@ -65,11 +65,36 @@ export const TradeScreen = () => {
         />
 
         <View style={styles.buttonGroup}>
-            <Button title="Buy" onPress={() => setAction('buy')} color={action === 'buy' ? 'green' : 'gray'} />
-            <Button title="Sell" onPress={() => setAction('sell')} color={action === 'sell' ? 'red' : 'gray'} />
+            <TouchableOpacity
+                style={[
+                    styles.button,
+                    action === 'buy' ? styles.buyActive : styles.inactive
+                ]}
+                onPress={() => setAction('buy')}
+            >   
+                <Text style={styles.text}>Buy</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={[
+                    styles.button,
+                    action === 'sell' ? styles.sellActive : styles.inactive
+                ]}
+                onPress={() => setAction('sell')}
+            >
+                <Text style={styles.text}>Sell</Text>
+            </TouchableOpacity>
         </View>
 
-        <Button title="Confirm Trade" onPress={handleTrade} disabled={!usdAmount.trim()}/>
+        <TouchableOpacity
+            style={[
+                styles.confirmButton,
+                !usdAmount.trim() ? styles.confirmDisabled : styles.confirmEnabled
+            ]}
+            onPress={handleTrade}
+            activeOpacity={0.7}
+        >
+            <Text style={styles.text}>Confirm Trade</Text>
+        </TouchableOpacity>
         <Text style={styles.balance}>Current Balance: ${balance.toFixed(2)}</Text>
         </View>
     </SafeAreaView>
@@ -91,6 +116,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginVertical: 15,
+    gap:16
   },
+  button: {
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 8,
+    alignItems: 'center',
+    flex: 1,
+    height: 48,
+  },
+  confirmButton: {
+    height: 48,
+    width: '100%',
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 8
+  },
+  confirmEnabled: {
+    backgroundColor: '#000'
+  },
+  confirmDisabled: {
+    backgroundColor: '#aaa'
+  },
+  text: { color: 'white', fontWeight: 'bold' },
+  buyActive: { backgroundColor: 'green' },
+  sellActive: { backgroundColor: 'red' },
+  inactive: { backgroundColor: 'gray' },
   balance: { marginTop: 20, fontStyle: 'italic' },
 })
