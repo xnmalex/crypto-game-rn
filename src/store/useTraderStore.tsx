@@ -1,4 +1,6 @@
 import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export interface Transaction {
   id: string
@@ -18,21 +20,29 @@ interface TraderState {
   reset: () => void
 }
 
-export const useTraderStore = create<TraderState>((set) => ({
-  username: '',
-  balance: 5000,
-  transactions: [],
+export const useTraderStore = create(
+  persist<TraderState>(
+    (set, get) => ({
+      username: '',
+      balance: 5000,
+      transactions: [],
 
-  setUsername: (username) => set({ username }),
+      setUsername: (username) => set({ username }),
 
-  addTransaction: (tx) =>
-    set((state) => ({
-      transactions: [...state.transactions, tx],
-      balance:
-        tx.type === 'buy'
-          ? state.balance - tx.amountUSD
-          : state.balance + tx.amountUSD,
-    })),
+      addTransaction: (tx) =>
+        set((state) => ({
+          transactions: [...state.transactions, tx],
+          balance:
+            tx.type === 'buy'
+              ? state.balance - tx.amountUSD
+              : state.balance + tx.amountUSD,
+        })),
 
-  reset: () => set({ username: '', balance: 5000, transactions: [] }),
-}))
+      reset: () => set({ username: '', balance: 5000, transactions: [] }),
+    }),
+    {
+      name: 'trader-store', // unique key for storage
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+)
