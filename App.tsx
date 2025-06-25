@@ -16,6 +16,7 @@ import { UsernameScreen } from './src/screens/UsernameScreen'
 import { CryptoListScreen } from './src/screens/CryptoListScreen'
 import { TradeScreen } from './src/screens/TradeScreen'
 import { LeaderboardScreen } from './src/screens/LeaderboardScreen'
+import { ProfileScreen } from './src/screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -37,6 +38,7 @@ function MainTabs() {
       <Tab.Screen name="CryptoList" component={CryptoListScreen} />
       <Tab.Screen name="Trade" component={TradeScreen} />
       <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
      
     </Tab.Navigator>
   )
