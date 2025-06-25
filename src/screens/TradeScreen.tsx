@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity } from 'reac
 import { useTraderStore } from '../store/useTraderStore'
 import { v4 as uuidv4 } from 'uuid'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { ButtonType, ConfigButton } from '../components/ConfigButton'
 
 export const TradeScreen = () => {
   const [symbol, setSymbol] = useState('BTC')
@@ -85,16 +86,11 @@ export const TradeScreen = () => {
             </TouchableOpacity>
         </View>
 
-        <TouchableOpacity
-            style={[
-                styles.confirmButton,
-                !usdAmount.trim() ? styles.confirmDisabled : styles.confirmEnabled
-            ]}
-            onPress={handleTrade}
-            activeOpacity={0.7}
-        >
-            <Text style={styles.text}>Confirm Trade</Text>
-        </TouchableOpacity>
+        <ConfigButton
+          type={ButtonType.DEFAULT}
+          disabled={!usdAmount.trim()}
+          onPress={handleTrade}
+        />
         <Text style={styles.balance}>Current Balance: ${balance.toFixed(2)}</Text>
         </View>
     </SafeAreaView>
@@ -126,20 +122,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 48,
   },
-  confirmButton: {
-    height: 48,
-    width: '100%',
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 8
-  },
-  confirmEnabled: {
-    backgroundColor: '#000'
-  },
-  confirmDisabled: {
-    backgroundColor: '#aaa'
-  },
+  
   text: { color: 'white', fontWeight: 'bold' },
   buyActive: { backgroundColor: 'green' },
   sellActive: { backgroundColor: 'red' },

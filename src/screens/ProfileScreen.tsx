@@ -15,6 +15,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../navigation/types'
 import { Avatar } from '../components/Avatar'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import {ButtonType, ConfigButton} from '../components/ConfigButton'
 
 export const ProfileScreen = () => {
   const { username, transactions, reset } = useTraderStore()
@@ -52,7 +53,10 @@ export const ProfileScreen = () => {
 
       {/* Logout Button */}
       <View style={{ marginBottom: 24 }}>
-        <Button title="Log out" color="#d9534f" onPress={handleLogout} />
+         <ConfigButton
+            onPress={handleLogout}
+            type={ButtonType.LOGOUT} 
+        />
       </View>
 
       {/* Transaction History */}

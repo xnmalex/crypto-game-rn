@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native'
 import { useTraderStore } from '../store/useTraderStore'
 import { useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import {ButtonType, ConfigButton} from '../components/ConfigButton'
 
 export const UsernameScreen = () => {
   const [name, setName] = useState('')
@@ -25,7 +26,12 @@ export const UsernameScreen = () => {
         value={name}
         onChangeText={setName}
       />
-      <Button title="Continue" onPress={handleContinue} disabled={!name.trim()} />
+      <ConfigButton
+        onPress={handleContinue}
+        type={ButtonType.DEFAULT}
+        title="Continue"
+        disabled={!name.trim()}
+      />
     </View>
   )
 }
