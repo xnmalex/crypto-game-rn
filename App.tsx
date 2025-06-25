@@ -11,10 +11,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from '@react-native-vector-icons/ionicons';
 
-
 import { useTraderStore } from './src/store/useTraderStore'
 import { UsernameScreen } from './src/screens/UsernameScreen'
 import { CryptoListScreen } from './src/screens/CryptoListScreen'
+import { TradeScreen } from './src/screens/TradeScreen'
+import { LeaderboardScreen } from './src/screens/LeaderboardScreen'
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -27,12 +28,15 @@ function MainTabs() {
           let icon = 'home'
           if (route.name === 'Trade') icon = 'swap-horizontal'
           if (route.name === 'Leaderboard') icon = 'trophy'
+          if (route.name === 'Profile') icon = 'person'
           return <Ionicons name={icon} size={size} color={color} />
         },
         headerShown: false,
       })}
     >
       <Tab.Screen name="CryptoList" component={CryptoListScreen} />
+      <Tab.Screen name="Trade" component={TradeScreen} />
+      <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
      
     </Tab.Navigator>
   )

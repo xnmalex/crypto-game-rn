@@ -1,0 +1,96 @@
+import React, { useState } from 'react'
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native'
+import { useTraderStore } from '../store/useTraderStore'
+import { v4 as uuidv4 } from 'uuid'
+import { SafeAreaView } from 'react-native-safe-area-context'
+
+export const TradeScreen = () => {
+  const [symbol, setSymbol] = useState('BTC')
+  const [usdAmount, setUsdAmount] = useState('')
+  const [action, setAction] = useState<'buy' | 'sell'>('buy')
+
+  const balance = useTraderStore((state) => state.balance)
+  const addTransaction = useTraderStore((state) => state.addTransaction)
+
+  const prices: Record<string, number> = {
+    BTC: 64000,
+    ETH: 3400,
+    SOL: 145,
+  }
+
+  const handleTrade = () => {
+    const usd = parseFloat(usdAmount)
+    if (isNaN(usd) || usd <= 0) return Alert.alert('Invalid amount')
+
+    if (action === 'buy' && usd > balance) {
+      return Alert.alert('Insufficient balance')
+    }
+
+    const price = prices[symbol.toUpperCase()]
+    if (!price) return Alert.alert('Unsupported symbol')
+
+    const tx = {
+      id: uuidv4(),
+      type: action,
+      symbol: symbol.toUpperCase(),
+      amountUSD: usd,
+      amountCrypto: usd / price,
+      timestamp: Date.now(),
+    }
+
+    addTransaction(tx)
+    Alert.alert(`${action === 'buy' ? 'Purchased' : 'Sold'} ${tx.amountCrypto.toFixed(6)} ${tx.symbol}`)
+    setUsdAmount('')
+  }
+
+  return (
+     <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.container}>
+        <Text style={styles.header}>Trade</Text>
+
+        <Text style={styles.label}>Crypto Symbol (BTC, ETH, SOL)</Text>
+        <TextInput
+            value={symbol}
+            onChangeText={setSymbol}
+            style={styles.input}
+            autoCapitalize="characters"
+        />
+
+        <Text style={styles.label}>USD Amount</Text>
+        <TextInput
+            value={usdAmount}
+            onChangeText={setUsdAmount}
+            keyboardType="numeric"
+            style={styles.input}
+        />
+
+        <View style={styles.buttonGroup}>
+            <Button title="Buy" onPress={() => setAction('buy')} color={action === 'buy' ? 'green' : 'gray'} />
+            <Button title="Sell" onPress={() => setAction('sell')} color={action === 'sell' ? 'red' : 'gray'} />
+        </View>
+
+        <Button title="Confirm Trade" onPress={handleTrade} disabled={!usdAmount.trim()}/>
+        <Text style={styles.balance}>Current Balance: ${balance.toFixed(2)}</Text>
+        </View>
+    </SafeAreaView>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20 },
+  header: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
+  label: { marginTop: 10, fontWeight: '600' },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    borderRadius: 8,
+    marginTop: 5,
+  },
+  buttonGroup: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginVertical: 15,
+  },
+  balance: { marginTop: 20, fontStyle: 'italic' },
+})

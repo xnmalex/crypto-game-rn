@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, FlatList, StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const mockData = [
   { symbol: 'BTC', name: 'Bitcoin', price: 64000, change: 1.2 },
@@ -9,6 +10,7 @@ const mockData = [
 
 export const CryptoListScreen = () => {
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <FlatList
       data={mockData}
       keyExtractor={(item) => item.symbol}
@@ -29,6 +31,7 @@ export const CryptoListScreen = () => {
         </View>
       )}
     />
+    </SafeAreaView>
   )
 }
 
