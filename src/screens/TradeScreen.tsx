@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity } from 'react-native'
 import { useTraderStore } from '../store/useTraderStore'
-import { v4 as uuidv4 } from 'uuid'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ButtonType, ConfigButton } from '../components/ConfigButton'
+import { generateTradeId } from '../utils/generateTradeId'
 
 export const TradeScreen = () => {
   const [symbol, setSymbol] = useState('BTC')
@@ -31,7 +31,7 @@ export const TradeScreen = () => {
     if (!price) return Alert.alert('Unsupported symbol')
 
     const tx = {
-      id: uuidv4(),
+      id: generateTradeId(),
       type: action,
       symbol: symbol.toUpperCase(),
       amountUSD: usd,
