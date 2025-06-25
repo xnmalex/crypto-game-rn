@@ -1,36 +1,53 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { View, Text, FlatList, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { SearchBar } from '../components/SearchBar'
+import { NoResult } from '../components/NoResult'
 
-const mockData = [
+const allCryptos  = [
   { symbol: 'BTC', name: 'Bitcoin', price: 64000, change: 1.2 },
   { symbol: 'ETH', name: 'Ethereum', price: 3400, change: -0.5 },
   { symbol: 'SOL', name: 'Solana', price: 145, change: 2.1 },
+  { symbol: 'ADA', name: 'Cardano', price: 0.39, change: 0.4 },
+  { symbol: 'XRP', name: 'Ripple', price: 0.63, change: -0.8 },
+  { symbol: 'DOGE', name: 'Dogecoin', price: 0.13, change: 4.1 },
 ]
 
 export const CryptoListScreen = () => {
+  const [search, setSearch] = useState('')
+
+  const filtered = allCryptos.filter(
+    (item) =>
+      item.symbol.toLowerCase().includes(search.toLowerCase()) ||
+      item.name.toLowerCase().includes(search.toLowerCase())
+  )
   return (
     <SafeAreaView style={{ flex: 1 }}>
-    <FlatList
-      data={mockData}
-      keyExtractor={(item) => item.symbol}
-      contentContainerStyle={styles.list}
-      renderItem={({ item }) => (
-        <View style={styles.card}>
-          <View>
-            <Text style={styles.symbol}>{item.symbol}</Text>
-            <Text style={styles.name}>{item.name}</Text>
+    <SearchBar value={search} onChange={setSearch} placeholder="Search crypto..." />
+    {filtered.length === 0 ? (
+      <NoResult message={`No cryptocurrencies match "${search}"`} />
+    ) : (
+      <FlatList
+        data={filtered}
+        keyExtractor={(item) => item.symbol}
+        contentContainerStyle={styles.list}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <View>
+              <Text style={styles.symbol}>{item.symbol}</Text>
+              <Text style={styles.name}>{item.name}</Text>
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text style={styles.price}>${item.price.toFixed(2)}</Text>
+              <Text style={{ color: item.change >= 0 ? 'green' : 'red' }}>
+                {item.change >= 0 ? '+' : ''}
+                {item.change}%
+              </Text>
+            </View>
           </View>
-          <View style={{ alignItems: 'flex-end' }}>
-            <Text style={styles.price}>${item.price.toFixed(2)}</Text>
-            <Text style={{ color: item.change >= 0 ? 'green' : 'red' }}>
-              {item.change >= 0 ? '+' : ''}
-              {item.change}%
-            </Text>
-          </View>
-        </View>
-      )}
-    />
+        )}
+      />
+    )}
     </SafeAreaView>
   )
 }
