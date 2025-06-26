@@ -8,9 +8,14 @@ Users start with **$5,000 virtual balance**, trade real-time crypto data, and co
 
 ## 📸 Screenshots
 
-| Username Input | Crypto List | Trade Screen | Leaderboard | Profile   |
-|----------------|-------------|---------------|--------------|--------------|
-| ![Username](./src/assets/screenshots/username.png) | ![Crypto List](./src/assets/screenshots/cryptolist.png) | ![Trade](./src/assets/screenshots/trade.png) | ![Leaderboard](./src/assets/screenshots/leaderboard.png) | ![Profile](./src/assets/screenshots/profile.png)
+| Username Input | Crypto List | Trade Screen | Trade Success
+|----------------|-------------|--------------|--------------
+| ![Username](./src/assets/screenshots/username.png) | ![Crypto List](./src/assets/screenshots/cryptolist.png)  | ![Trade](./src/assets/screenshots/trade.png) | ![Trade Success](./src/assets/screenshots/trade_success.png)
+
+
+| Leaderboard | Profile   
+|----------------|-------------
+|![Leaderboard](./src/assets/screenshots/leaderboard.png) | ![Profile](./src/assets/screenshots/profile.png)
 
 ## 📱 Features
 
