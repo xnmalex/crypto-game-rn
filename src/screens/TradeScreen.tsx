@@ -1,31 +1,25 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity } from 'react-native'
 import { useTraderStore } from '../store/useTraderStore'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ButtonType, ConfigButton } from '../components/ConfigButton'
 import { generateTradeId } from '../utils/generateTradeId'
 import { useCryptoStore } from '../store/useCryptoStore'
+import { Picker } from '@react-native-picker/picker'
 
 export const TradeScreen = () => {
-  const [symbol, setSymbol] = useState('BTC')
   const [usdAmount, setUsdAmount] = useState('')
   const [action, setAction] = useState<'buy' | 'sell' >('buy')
 
   const balance = useTraderStore((state) => state.balance)
   const addTransaction = useTraderStore((state) => state.addTransaction)
 
-  const prices: Record<string, number> = {
-    BTC: 64000,
-    ETH: 3400,
-    SOL: 145,
-  }
+  const { list } = useCryptoStore()
+  const [selectedSymbol, setSelectedSymbol] = useState<string | undefined>(
+    list[0]?.symbol // default to first
+  )
 
-  const { list, setList } = useCryptoStore()
-
-  useEffect(() => {
-    
-  }, [list])
-
+  const selectedCrypto = list.find((c) => c.symbol === selectedSymbol)
   const handleTrade = () => {
     const usd = parseFloat(usdAmount)
     if (isNaN(usd) || usd <= 0) return Alert.alert('Invalid amount')
@@ -34,13 +28,13 @@ export const TradeScreen = () => {
       return Alert.alert('Insufficient balance')
     }
 
-    const price = prices[symbol.toUpperCase()]
+    const price = selectedCrypto?.current_price? selectedCrypto?.current_price : 0
     if (!price) return Alert.alert('Unsupported symbol')
 
     const tx = {
       id: generateTradeId(),
       type: action,
-      symbol: symbol.toUpperCase(),
+      symbol: selectedSymbol ? selectedSymbol.toUpperCase() : `Unknown symbol`,
       amountUSD: usd,
       amountCrypto: usd / price,
       timestamp: Date.now(),
@@ -57,12 +51,35 @@ export const TradeScreen = () => {
         <Text style={styles.header}>Trade</Text>
 
         <Text style={styles.label}>Crypto Symbol (BTC, ETH, SOL)</Text>
-        <TextInput
-            value={symbol}
-            onChangeText={setSymbol}
-            style={styles.input}
-            autoCapitalize="characters"
-        />
+        <Picker
+          selectedValue={selectedSymbol}
+          onValueChange={(itemValue) => setSelectedSymbol(itemValue)}
+          style={styles.picker}
+        >
+          {list.map((crypto) => (
+            <Picker.Item
+              key={crypto.id}
+              label={`${crypto.name} (${crypto.symbol.toUpperCase()})`}
+              value={crypto.symbol}
+            />
+          ))}
+        </Picker>
+
+        {selectedCrypto && (
+          <View style={styles.infoBox}>
+            <Text style={styles.price}>
+              Price: ${selectedCrypto.current_price.toFixed(2)}
+            </Text>
+            <Text
+              style={{
+                color: selectedCrypto.price_change_percentage_24h >= 0 ? 'green' : 'red',
+              }}
+            >
+              24h Change: {selectedCrypto.price_change_percentage_24h.toFixed(2)}%
+            </Text>
+          </View>
+        )}
+
 
         <Text style={styles.label}>USD Amount</Text>
         <TextInput
@@ -131,10 +148,17 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 48,
   },
-  
   text: { color: 'white', fontSize:15, fontWeight: 'bold' },
   buyActive: { backgroundColor: 'green' },
   sellActive: { backgroundColor: 'red' },
   inactive: { backgroundColor: 'gray' },
-  balance: { marginTop: 20, fontStyle: 'italic' },
+  balance: { marginTop: 20, fontStyle: 'italic', color:'#fff' },
+  picker: {
+    backgroundColor: '#1e1e1e',
+    color:'#fff',
+    borderRadius: 24,
+    marginTop:10
+  },
+  infoBox: { marginTop: 16 },
+  price: { fontSize: 18,color:'#fff', fontWeight: 'bold' },
 })
