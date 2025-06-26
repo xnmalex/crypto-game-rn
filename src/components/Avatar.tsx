@@ -3,13 +3,14 @@ import { Image, StyleSheet, View } from 'react-native'
 import Ionicons from '@react-native-vector-icons/ionicons';
 
 type AvatarProps = {
-  username: string
+  username?: string
   size?: number
   iconName?: string
   style?: object
+  image_uri: string
 }
 
-export const Avatar = ({ username, size = 96, iconName = 'person', style = {} }: AvatarProps) => {
+export const Avatar = ({ username, size = 96, iconName = 'person', style = {}, image_uri }: AvatarProps) => {
   const [error, setError] = useState(false)
 
   const containerSize = {
@@ -25,7 +26,7 @@ export const Avatar = ({ username, size = 96, iconName = 'person', style = {} }:
       ) : (
         <Image
           source={{
-            uri: `https://api.dicebear.com/7.x/thumbs/svg?seed=${username}`,
+            uri: image_uri,
           }}
           onError={() => setError(true)}
           style={[styles.image, containerSize]}

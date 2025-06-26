@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity } from 'react-native'
 import { useTraderStore } from '../store/useTraderStore'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ButtonType, ConfigButton } from '../components/ConfigButton'
 import { generateTradeId } from '../utils/generateTradeId'
+import { useCryptoStore } from '../store/useCryptoStore'
 
 export const TradeScreen = () => {
   const [symbol, setSymbol] = useState('BTC')
@@ -18,6 +19,12 @@ export const TradeScreen = () => {
     ETH: 3400,
     SOL: 145,
   }
+
+  const { list, setList } = useCryptoStore()
+
+  useEffect(() => {
+    
+  }, [list])
 
   const handleTrade = () => {
     const usd = parseFloat(usdAmount)
@@ -45,7 +52,7 @@ export const TradeScreen = () => {
   }
 
   return (
-     <SafeAreaView style={{ flex: 1 }}>
+     <SafeAreaView style={{ flex: 1, backgroundColor:'#000' }}>
         <View style={styles.container}>
         <Text style={styles.header}>Trade</Text>
 
@@ -99,14 +106,16 @@ export const TradeScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
-  header: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
-  label: { marginTop: 10, fontWeight: '600' },
+  header: { fontSize: 24, color:'#fff', fontWeight: 'bold', marginBottom: 20 },
+  label: { marginTop: 10, color:'#fff', fontWeight: '600' },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    padding: 10,
+    padding: 12,
     borderRadius: 8,
     marginTop: 5,
+    color:'#fff',
+    fontSize:16
   },
   buttonGroup: {
     flexDirection: 'row',
@@ -123,7 +132,7 @@ const styles = StyleSheet.create({
     height: 48,
   },
   
-  text: { color: 'white', fontWeight: 'bold' },
+  text: { color: 'white', fontSize:15, fontWeight: 'bold' },
   buyActive: { backgroundColor: 'green' },
   sellActive: { backgroundColor: 'red' },
   inactive: { backgroundColor: 'gray' },

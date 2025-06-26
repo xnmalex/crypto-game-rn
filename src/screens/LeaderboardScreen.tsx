@@ -13,21 +13,6 @@ export const LeaderboardScreen = () => {
     { username: 'Alice', balance: 6200 },
     { username: 'Bob', balance: 5900 },
     { username: 'Clara', balance: 5700 },
-    { username: 'Alice', balance: 6200 },
-    { username: 'Bob', balance: 5900 },
-    { username: 'Clara', balance: 5700 },
-    { username: 'Alice', balance: 6200 },
-    { username: 'Bob', balance: 5900 },
-    { username: 'Clara', balance: 5700 },
-    { username: 'Alice', balance: 6200 },
-    { username: 'Bob', balance: 5900 },
-    { username: 'Clara', balance: 5700 },
-    { username: 'Alice', balance: 6200 },
-    { username: 'Bob', balance: 5900 },
-    { username: 'Clara', balance: 5700 },
-    { username: 'Alice', balance: 6200 },
-    { username: 'Bob', balance: 5900 },
-    { username: 'Clara', balance: 5700 },
   ]
 
   const yourScore = { username, balance }
@@ -35,7 +20,7 @@ export const LeaderboardScreen = () => {
   const sorted = [...fakeTraders, yourScore].sort((a, b) => b.balance - a.balance)
 
   return (
-     <SafeAreaView style={{ flex: 1 }}>
+     <SafeAreaView style={{ flex: 1, backgroundColor:'#000' }}>
         <FlatList
         data={sorted}
         keyExtractor={(item) => item.username}
@@ -62,17 +47,17 @@ export const LeaderboardScreen = () => {
 
 const styles = StyleSheet.create({
   list: { padding: 16 },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 16, textAlign: 'center' },
+  title: { fontSize: 24, color:'#fff', fontWeight: 'bold', marginBottom: 16, textAlign: 'center' },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#eee',
-    padding: 12,
+    backgroundColor: '#111',
+    padding: 24,
     marginBottom: 8,
     borderRadius: 8,
   },
-  highlightRow: { backgroundColor: '#cdeffc' },
-  rank: { width: 40, fontWeight: 'bold' },
-  name: { flex: 1 },
-  score: { fontWeight: 'bold' },
+  highlightRow: { backgroundColor: '#cd3' },
+  rank: { width: 40,fontSize:20, color:'#fff', fontWeight: 'bold' },
+  name: { flex: 1, fontSize:20, color:'#fff', fontWeight: 'bold'  },
+  score: { fontSize:20, color:'#fff', fontWeight: 'bold' },
 })

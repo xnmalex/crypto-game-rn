@@ -24,7 +24,7 @@ const Tab = createBottomTabNavigator()
 function MainTabs() {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={({ route  }) => ({
         tabBarIcon: ({ color, size }) => {
           let icon = 'home'
           if (route.name === 'Trade') icon = 'swap-horizontal'
@@ -32,6 +32,9 @@ function MainTabs() {
           if (route.name === 'Profile') icon = 'person'
           return <Ionicons name={icon} size={size} color={color} />
         },
+        tabBarActiveTintColor: 'lightgreen',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: { backgroundColor: '#000' },
         headerShown: false,
       })}
     >

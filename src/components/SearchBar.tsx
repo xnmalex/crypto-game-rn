@@ -29,10 +29,12 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f1f1f1',
+    backgroundColor: '#111',
     paddingHorizontal: 10,
+    paddingVertical:5,
     borderRadius: 10,
     marginVertical: 10,
+    marginHorizontal:16
   },
   icon: {
     marginRight: 8,
@@ -40,6 +42,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 40,
-    fontSize: 16,
+    fontSize: 18,
+    color:'#fff'
   },
 })

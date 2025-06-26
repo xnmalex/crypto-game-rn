@@ -46,7 +46,7 @@ export const ProfileScreen = () => {
     <SafeAreaView style={styles.container}>
       {/* Profile Header */}
       <View style={styles.profile}>
-        <Avatar username={username} size={96} />
+        <Avatar image_uri={`https://api.dicebear.com/7.x/thumbs/png?seed=${username}`} size={96} />
         <Text style={styles.name}>{username}</Text>
         <Text style={styles.since}>Trader since {createdAt}</Text>
       </View>
@@ -62,7 +62,7 @@ export const ProfileScreen = () => {
       {/* Transaction History */}
       <Text style={styles.sectionTitle}>Transaction History</Text>
       {transactions.length === 0 ? (
-        <Text style={{ textAlign: 'center', color: '#888' }}>
+        <Text style={{ textAlign: 'center', color: '#fff' }}>
           No transactions yet.
         </Text>
       ) : (
@@ -71,14 +71,14 @@ export const ProfileScreen = () => {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View style={styles.txItem}>
-              <Text style={{ fontWeight: 'bold' }}>
+              <Text style={{ fontWeight: 'bold', color: '#fff' }}>
                 {item.type.toUpperCase()} {item.symbol}
               </Text>
-              <Text>
+              <Text style={{ fontWeight: 'bold', color: '#fff' }}>
                 ${item.amountUSD.toFixed(2)} →{' '}
                 {item.amountCrypto.toFixed(6)} {item.symbol}
               </Text>
-              <Text style={{ fontSize: 12, color: '#666' }}>
+              <Text style={{ fontSize: 12, color: '#ddd' }}>
                 {dayjs(item.timestamp).format('MMM D, YYYY h:mm A')}
               </Text>
             </View>
@@ -90,7 +90,7 @@ export const ProfileScreen = () => {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
+  container: { flex: 1, padding: 16, backgroundColor:'#000' },
   profile: { alignItems: 'center', marginBottom: 24 },
   avatar: {
     width: 96,
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     backgroundColor: '#eee',
   },
-  name: { fontSize: 22, fontWeight: 'bold' },
+  name: { fontSize: 22, color:'#fff', fontWeight: 'bold', marginTop:10 },
   since: { color: '#666' },
   sectionTitle: {
     fontSize: 18,
@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     paddingBottom: 4,
+    color:'#fff'
   },
   txItem: {
     paddingVertical: 12,

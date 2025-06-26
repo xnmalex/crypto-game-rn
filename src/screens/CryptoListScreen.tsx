@@ -5,6 +5,7 @@ import { SearchBar } from '../components/SearchBar'
 import { NoResult } from '../components/NoResult'
 import { useCryptoStore } from '../store/useCryptoStore'
 import { fetchCryptoList } from '../api'
+import { Avatar } from '../components/Avatar'
 
 // const allCryptos  = [
 //   { symbol: 'BTC', name: 'Bitcoin', price: 64000, change: 1.2 },
@@ -54,8 +55,8 @@ export const CryptoListScreen = () => {
   }, [])
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-    <SearchBar value={search} onChange={setSearch} placeholder="Search crypto..." />
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#000' }}>
+    <SearchBar value={search} onChange={setSearch} placeholder="Search" />
     {
       loading ? (
         <ActivityIndicator style={{ marginTop: 20 }} size="large" />
@@ -68,13 +69,17 @@ export const CryptoListScreen = () => {
           contentContainerStyle={styles.list}
           renderItem={({ item }) => (
             <View style={styles.card}>
-              <View>
-                <Text style={styles.symbol}>{item.symbol}</Text>
-                <Text style={styles.name}>{item.name}</Text>
+              
+              <View style={{flexDirection:"row"}}>
+                <Avatar image_uri={item.image} size={48}/>
+                <View style={{marginLeft:10}}>
+                  <Text style={styles.name} ellipsizeMode='tail'>{item.name.substring(0,20)}</Text>
+                  <Text style={styles.symbol}>{item.symbol}</Text>
+                </View>
               </View>
               <View style={{ alignItems: 'flex-end' }}>
-                <Text style={styles.price}>${item.price_change_24h? item.price_change_24h.toFixed(2): 0}</Text>
-                <Text style={{ color: item.price_change_percentage_24h >= 0 ? 'green' : 'red' }}>
+                <Text style={styles.price}>${item.current_price? item.current_price.toFixed(2): 0}</Text>
+                <Text style={{ color: item.price_change_percentage_24h >= 0 ? 'green' : 'red', fontSize:16,fontWeight:'bold' }}>
                   {item.price_change_percentage_24h >= 0 ? '+' : ''}
                   {item.price_change_percentage_24h}%
                 </Text>
@@ -93,11 +98,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 16,
-    borderRadius: 12,
-    backgroundColor: '#f3f3f3',
+    borderRadius: 14,
+    backgroundColor: '#1a1a1a',
     marginBottom: 12,
   },
-  symbol: { fontSize: 18, fontWeight: 'bold', textTransform:'uppercase' },
-  name: { color: '#777' },
-  price: { fontSize: 16, fontWeight: 'bold' },
+  name: { color: '#fff', fontSize: 18, fontWeight: 'bold'  },
+  symbol: { color: '#ddd',fontSize: 16, textTransform:'uppercase' },
+  price: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
 })

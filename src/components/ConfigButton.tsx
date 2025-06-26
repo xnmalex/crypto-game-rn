@@ -19,7 +19,7 @@ export type ButtonType = typeof ButtonType[keyof typeof ButtonType]
 
 export const BUTTON_PRESETS: Record<ButtonType, { backgroundColor: string; text: string }> = {
   [ButtonType.DEFAULT]: {
-    backgroundColor: '#000', //#0569FF blue
+    backgroundColor: '#111', //#0569FF blue
     text: 'Confirm Trade',
   },
   [ButtonType.LOGOUT]: {
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
-    fontSize: 15,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '500',
   },
 })
