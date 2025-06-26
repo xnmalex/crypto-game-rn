@@ -3,9 +3,9 @@ import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity } from 'reac
 import { useTraderStore } from '../store/useTraderStore'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ButtonType, ConfigButton } from '../components/ConfigButton'
-import { generateTradeId } from '../utils/generateTradeId'
 import { useCryptoStore } from '../store/useCryptoStore'
 import { Picker } from '@react-native-picker/picker'
+import { handleTrade } from '../features/trade/handleTrade'
 
 export const TradeScreen = () => {
   const [usdAmount, setUsdAmount] = useState('')
@@ -20,30 +20,6 @@ export const TradeScreen = () => {
   )
 
   const selectedCrypto = list.find((c) => c.symbol === selectedSymbol)
-  const handleTrade = () => {
-    const usd = parseFloat(usdAmount)
-    if (isNaN(usd) || usd <= 0) return Alert.alert('Invalid amount')
-
-    if (action === 'buy' && usd > balance) {
-      return Alert.alert('Insufficient balance')
-    }
-
-    const price = selectedCrypto?.current_price? selectedCrypto?.current_price : 0
-    if (!price) return Alert.alert('Unsupported symbol')
-
-    const tx = {
-      id: generateTradeId(),
-      type: action,
-      symbol: selectedSymbol ? selectedSymbol.toUpperCase() : `Unknown symbol`,
-      amountUSD: usd,
-      amountCrypto: usd / price,
-      timestamp: Date.now(),
-    }
-
-    addTransaction(tx)
-    Alert.alert(`${action === 'buy' ? 'Purchased' : 'Sold'} ${tx.amountCrypto.toFixed(6)} ${tx.symbol}`)
-    setUsdAmount('')
-  }
 
   return (
      <SafeAreaView style={{ flex: 1, backgroundColor:'#000' }}>
@@ -113,7 +89,13 @@ export const TradeScreen = () => {
         <ConfigButton
           type={ButtonType.DEFAULT}
           disabled={!usdAmount.trim()}
-          onPress={handleTrade}
+          onPress={()=>{
+            if(selectedCrypto){
+              const result = handleTrade(action, selectedCrypto, parseFloat(usdAmount))
+              Alert.alert(result.message)
+              setUsdAmount('')
+            }
+          }}
         />
         <Text style={styles.balance}>Current Balance: ${balance.toFixed(2)}</Text>
         </View>
