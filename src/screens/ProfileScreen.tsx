@@ -72,7 +72,7 @@ export const ProfileScreen = () => {
           renderItem={({ item }) => (
             <View style={styles.txItem}>
               <Text style={{ fontWeight: 'bold', color: '#fff' }}>
-                {item.type.toUpperCase()} {item.symbol}
+                <Text style={{ fontWeight: 'bold', color: item.type === 'buy'? 'green':'red' }}>{item.type.toUpperCase()}</Text> {item.symbol}
               </Text>
               <Text style={{ fontWeight: 'bold', color: '#fff' }}>
                 ${item.amountUSD.toFixed(2)} →{' '}
